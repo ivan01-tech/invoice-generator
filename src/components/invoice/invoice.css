@@ -1,0 +1,41 @@
+.genInvoiceWrap {
+  padding: 0.5rem;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.genInvoiceWrapForm {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.formFooter {
+  justify-self: flex-end;
+  padding: 0.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--borderColor);
+}
+.price {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.inputTitle {
+  display: flex;
+}
+
+.inputTitle > :nth-child(1) {
+  flex: 3;
+}
+
+.inputTitle > :nth-child(2) {
+  flex: 2;
+}
+
+.inputTitle > :nth-child(3) {
+  flex: 1;
+}

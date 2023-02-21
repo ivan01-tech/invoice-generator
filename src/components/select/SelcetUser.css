@@ -1,0 +1,49 @@
+.selectWrapper {
+  display: flex;
+  align-items: center;
+  padding: 0.2rem;
+  cursor: pointer;
+  position: relative;
+}
+
+.userOptions {
+  background-color: aliceblue;
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 3rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  max-height: 300px;
+  overflow: auto;
+  visibility: hidden;
+  z-index: 1000;
+}
+.userOptions.show {
+  visibility: visible;
+}
+
+.currentItem,
+.userItem {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.userItem {
+  height: 40px;
+  padding: 0.2rem;
+}
+
+.userItem:hover {
+  background-color: rgba(93, 183, 206, 0.342);
+  color: white;
+}
+
+.userItem:focus,
+.userItem.active {
+  color: white;
+  background-color: rgba(64, 184, 214, 0.815);
+}

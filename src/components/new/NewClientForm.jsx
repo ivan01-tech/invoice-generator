@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./newform.css";
 import profile from "../../assets/profile.png";
+
 function NewClientForm() {
   // state that content user profile
   const [ImageFile, setImageFile] = useState(null);
