@@ -1,0 +1,41 @@
+.newFormWrap {
+  margin: auto;
+  padding: 1rem;
+  margin: 0.5rem;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+input,
+button {
+  width: 100%;
+  display: block;
+}
+
+input {
+  border: none;
+  border-bottom: 1px solid var(--borderColor);
+  background-color: whitesmoke;
+  padding: 0.5rem 0.2rem;
+  outline: none;
+}
+input:focus {
+  border: 1px solid var(--borderColor);
+  border-radius: 4px;
+}
+
+button {
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  padding: 0.3rem 1rem;
+  padding: 0.5rem 0.2rem;
+  color: white;
+  background-color: royalblue;
+}
+label {
+  font-size: 0.8rem;
+  color: gray;
+}
