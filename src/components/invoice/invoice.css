@@ -43,6 +43,12 @@
   flex: 1;
 }
 
+/* styled for inpu error */
+.error {
+  border-bottom: 1px solid red;
+  background-color: rgba(223, 94, 94, 0.253);
+}
+
 /** add new item div  **/
 .addBtn {
   margin-top: 0.5rem;
