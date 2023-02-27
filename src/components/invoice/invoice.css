@@ -1,7 +1,7 @@
-.genInvoiceWrap {
-  padding: 0.5rem;
-  height: 100%;
+/* ====================  GENERATE INVOICE PAGE ========================== */
 
+.genInvoiceWrap {
+  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -10,32 +10,73 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
+
+.inpGrp {
+  /* flex: 1; */
+  max-height: 40vh;
+  overflow: auto;
+  padding: 10px;
+}
+
+.inpGrpItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputItem {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.inputItem > :nth-child(1) {
+  flex: 3;
+}
+
+.inputItem > :nth-child(2) {
+  flex: 2;
+}
+
+.inputItem > :nth-child(3) {
+  flex: 1;
+}
+
+/** add new item div  **/
+.addBtn {
+  margin-top: 0.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+.addBtn > :nth-child(1) {
+  width: max-content;
+  padding: 0.3rem 1rem;
+  background-color: transparent;
+  color: rgb(43, 147, 231);
+  cursor: pointer;
+}
+
+.addBtn > :nth-child(1):hover,
+.addBtn > :nth-child(1):focus {
+  background-color: rgb(189, 220, 245);
+}
+
+/* end add new item */
+
+/* footer bottom */
 
 .formFooter {
   justify-self: flex-end;
   padding: 0.5rem;
-  padding-top: 2rem;
+  padding-top: 1rem;
   border-top: 1px solid var(--borderColor);
 }
+
 .price {
   display: flex;
   justify-content: space-between;
   margin-bottom: 0.5rem;
 }
 
-.inputTitle {
-  display: flex;
-}
-
-.inputTitle > :nth-child(1) {
-  flex: 3;
-}
-
-.inputTitle > :nth-child(2) {
-  flex: 2;
-}
-
-.inputTitle > :nth-child(3) {
-  flex: 1;
-}
+/* end footer bottom */
