@@ -10,6 +10,8 @@
 :root {
   --primarycolor: rgba(187, 235, 243, 0.603);
   --borderColor: rgb(217, 224, 228);
+  --fontTitle: black;
+  --textColor: gray;
 }
 
 body {
@@ -19,6 +21,15 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: gray;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: black;
 }
 #root {
   width: 100%;
