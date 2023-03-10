@@ -3,13 +3,14 @@ const mongoose = require("mongoose")
 const UserModel = new mongoose.Schema({
 	email: {
 		type: String,
-		require: true
+		require: true,
 	},
 	fullname: {
 		type: String,
 		require: true
 	},
-	phone: { type: string, require: true }
+	phone: { type: String, require: true },
+	invoices: [{ type: mongoose.Types.ObjectId }]
 
 })
 

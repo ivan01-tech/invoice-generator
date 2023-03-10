@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import "./newform.css";
 import profile from "../../assets/profile.png";
 import { useRef } from "react";
+import { Axios } from "../../api/axios";
+
+const PHONE_REGEX = "(+237|237)s(6|2)(2|3|[5-9])[0-9]{7}/g";
 
 function NewClientForm() {
   // a ref to get all inputs value
@@ -27,16 +30,30 @@ function NewClientForm() {
     return;
   };
 
-  const submitFormHandler = (e) => {
+  const submitFormHandler = async (e) => {
     e.preventDefault();
 
     const fullname = inputRef.current[0].value;
+    const phone = inputRef.current[2].value;
+    const email = inputRef.current[1].value;
+
     const isfnCorrect = fullname.split(" ").every((part) => part.length > 4);
 
-    console.log(fullname);
-    console.log(isfnCorrect);
+    const isPhoneCorrect = phone.match(PHONE_REGEX);
+
+    console.log(fullname, phone, email);
+    console.log(isfnCorrect, isPhoneCorrect);
 
     if (!isfnCorrect) return setisFnErr(true);
+    if (!isPhoneCorrect) return setisPhoneErr(true);
+
+    try {
+      const res = await Axios.post("/users", { fullname, phone, email });
+
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
 
     return;
   };
@@ -44,7 +61,7 @@ function NewClientForm() {
   return (
     <div className="newFormWrap">
       <h3>Client Informations</h3>
-      <form action="" onSubmit={submitFormHandler}>
+      <form onSubmit={submitFormHandler}>
         <div className="inputGrp">
           <label htmlFor="name">Full name </label>
           <input
