@@ -1,5 +1,8 @@
 require("dotenv").config()
 const express = require("express")
+
+const nodemailer = require("nodemailer")
+
 const dbConnection = require("./config/dbConnection.js")
 const { default: mongoose } = require("mongoose")
 const rootRoute = require("./routes/root.js")
@@ -16,6 +19,35 @@ app.use(express.urlencoded({ extended: true }))
 app.use("/", rootRoute)
 // users route
 app.use("/users", usersRoute)
+
+
+
+// temporary route test sending email 
+app.get("/email", function (req, res) {
+	const mailOptions = {
+		from: '"Example Team" <ivansilatsa@example.com>',
+		to: 'belvinetonleu@example.com, user2@example.com',
+		subject: 'Nice Nodemailer test',
+		text: 'Hey there, it’s our first message sent with Nodemailer 😉 ',
+		html: '<b><h1>Hey there!</h1> </b><br> This is our first message sent with Nodemailer'
+	};
+	const transporter = nodemailer.createTransport(mailOptions)
+
+	transporter.verify(function (err, success) {
+		if (err) throw err
+		console.log("Server is ready to send email : ", success)
+	})
+
+	transporter.sendMail(mailOptions, function (err, info) {
+		if (err) throw err
+		console.log("info : ", info)
+	})
+
+
+})
+
+
+
 
 mongoose.connection.on("open", function (err) {
 	console.log("Connected to mongoDB")
