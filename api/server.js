@@ -1,13 +1,12 @@
 require("dotenv").config()
 const express = require("express")
-
-const nodemailer = require("nodemailer")
+// const nodemailer = require("nodemailer")
 
 const dbConnection = require("./config/dbConnection.js")
 const { default: mongoose } = require("mongoose")
 const rootRoute = require("./routes/root.js")
 const usersRoute = require("./routes/userRoute.js")
-const PORT = process.env.PORT || 3500
+const PORT = process.env.PORT || 4000
 const app = express()
 
 dbConnection()
@@ -19,8 +18,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use("/", rootRoute)
 // users route
 app.use("/users", usersRoute)
-
-
 
 // temporary route test sending email 
 app.get("/email", function (req, res) {
@@ -45,9 +42,6 @@ app.get("/email", function (req, res) {
 
 
 })
-
-
-
 
 mongoose.connection.on("open", function (err) {
 	console.log("Connected to mongoDB")
