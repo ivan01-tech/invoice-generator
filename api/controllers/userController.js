@@ -7,9 +7,10 @@ const getAllUsers = async function (req, res) {
 
 		if (!users || !users.length) return res.json({ message: "user not found ! ", status: "error" })
 
-		return res.json({ data: users })
+		return res.json(users)
 	} catch (err) {
 		console.log(err)
+		return res.json({ message: "Something went wrong ", status: "error" })
 	}
 }
 
@@ -31,6 +32,7 @@ const createUser = async function (req, res) {
 		return res.status(201).json(newUser)
 	} catch (err) {
 		console.log("error : ", err)
+		return res.json({ message: "Something went wrong ", status: "error" })
 	}
 
 }

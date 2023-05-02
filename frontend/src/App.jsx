@@ -1,10 +1,11 @@
+import SendInvoice from "./components/send/SendInvoice"
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import NewClientForm from "./components/new/NewClientForm";
+import GenerateInvoiceForm from "./components/invoice/GenerateInvoiceForm"
+import NewClientForm from "./components/new/NewClientForm"
 import Layout from "./components/layout/Layout";
-import Home from "./components/pages/Home";
-import GenerateInvoiceForm from "./components/invoice/GenerateInvoiceForm";
-import SendInvoice from "./components/send/SendInvoice";
+import Home from "./pages/Home"
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -12,9 +13,13 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="new" element={<NewClientForm />} />
+          <Route path="newuser" element={<NewClientForm />} />
           <Route path="generate" element={<GenerateInvoiceForm />} />
           <Route path="send" element={<SendInvoice />} />
+
+          {/* not found pages */}
+          <Route path="*" element={<NotFound />} />
+
         </Route>
       </Routes>
     </>
