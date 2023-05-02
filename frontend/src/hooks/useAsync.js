@@ -35,6 +35,13 @@ export function useAsyncInternal(func, dependencies = [], initial) {
 		setLoading(true)
 		return func(...params)
 			.then(res => {
+
+				if(res?.status){
+					setError(res?.message)
+					setValue(undefined)
+					return Promise.reject(res?.message)
+				}
+
 				setValue(res)
 				setError(undefined)
 				return res

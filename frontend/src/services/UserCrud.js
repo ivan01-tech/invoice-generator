@@ -14,7 +14,7 @@ export const getAllUsers = function () {
  * @param {} options 
  * @returns 
  */
-export const getUser = function ({ email, phone, fullname, }) {
+export const createUser = function ({ email, phone, fullname, }) {
     return makeRequest("users", {
         method: "POST",
         data: JSON.stringify({ email, phone, fullname, })
