@@ -1,4 +1,5 @@
 import React from "react";
+import profile from "../assets/profile.png";
 function SelectOptions({ user, handleSelectOptions, isSelected }) {
   //  a string that represent the classname
   const classNameString = isSelected ? "userItem active" : "userItem";
@@ -16,10 +17,10 @@ function SelectOptions({ user, handleSelectOptions, isSelected }) {
         }}
         width={"40px"}
         height={40}
-        src={user.image}
+        src={ profile}
         alt="profile"
       />
-      <h4>{user.name}</h4>
+      <h4>{user.fullname}</h4>
     </li>
   );
 }

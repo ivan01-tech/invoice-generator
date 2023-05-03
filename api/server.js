@@ -20,6 +20,7 @@ app.use(cors(corsOptions))
 app.use("/", rootRoute)
 // users route
 app.use("/users", usersRoute)
+app.use("/invoices", require("./routes/InvoiceRoute.js"))
 
 app.all('*', function (req, res) {
 	if (req.accepts("json")) {

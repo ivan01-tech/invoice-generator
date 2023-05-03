@@ -10,7 +10,7 @@ const getAllUsers = async function (req, res) {
 		return res.json(users)
 	} catch (err) {
 		console.log(err)
-		return res.json({ message: "Something went wrong ", status: "error" })
+		return res.status(500).json({ message: "Something went wrong ", status: "error" })
 	}
 }
 
@@ -32,7 +32,7 @@ const createUser = async function (req, res) {
 		return res.status(201).json(newUser)
 	} catch (err) {
 		console.log("error : ", err)
-		return res.json({ message: "Something went wrong ", status: "error" })
+		return res.status(500).json({ message: "Something went wrong ", status: "error" })
 	}
 
 }
