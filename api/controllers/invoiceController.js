@@ -1,10 +1,17 @@
+const { default: mongoose } = require("mongoose")
 const invoiceModel = require("../models/invoiceModel")
 const userModels = require("../models/userModels")
 
 module.exports = class InvoiceController {
-
-	static async getAllInvoice() {
-
+	/**
+	 * get All invoice
+	 * @param {Request} req 
+	 * @param {Response} res 
+	 * @returns 
+	 */
+	static async getAllInvoice(req, res) {
+		const invoices = await invoiceModel.find()
+		return res.json(invoices)
 	}
 
 	/**
@@ -18,10 +25,9 @@ module.exports = class InvoiceController {
 		try {
 
 			const { userId, items } = req.body
-			console.log("userid", items)
-			console.log("userid", userId)
 
-			if (!userId || !items?.length) {
+
+			if (!mongoose.Types.ObjectId.isValid(userId) || !Boolean(items?.length)) {
 				return res.status(403).json({ message: "wrong crudentials!", status: "error" })
 			}
 
@@ -29,20 +35,24 @@ module.exports = class InvoiceController {
 			if (!user) {
 				return res.status(404).json({ message: "User Not Found !", status: "error" })
 			}
+			console.log("userid : ", user)
 
 			const parseItems = items.map(i => ({
-				...i,
+				title: i.item,
 				hours: parseFloat(i.hours),
 				rate: parseFloat(i.rate)
 			}))
 
+			console.log("parse : ", parseItems)
 			const invoice = await invoiceModel.create({
-				userId, items: parseItems
+				userId: new mongoose.Types.ObjectId(userId),
+				items: parseItems
 			})
-
+			console.log("invoice : ", invoice)
 			return res.status(201).json({ ...invoice })
 
 		} catch (err) {
+			console.log("err : ", err)
 			return res.status(500).json({ message: "Something went wrong ", status: "error" })
 		}
 

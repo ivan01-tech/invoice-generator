@@ -1,11 +1,11 @@
 const { default: mongoose } = require("mongoose")
 
 const InvoiceSchema = mongoose.Schema({
-    userId: { type: mongoose.Types.ObjectId, },
-    items: [{
+    userId: { type: mongoose.Types.ObjectId, require: true },
+    items: Array({
         title: {
             type: String,
-            require: true
+            require: true,
         },
         hours: {
             type: Number,
@@ -15,7 +15,7 @@ const InvoiceSchema = mongoose.Schema({
             type: Number,
             require: true
         }
-    }]
+    })
 })
 
 module.exports = mongoose.model("Invoice", InvoiceSchema)

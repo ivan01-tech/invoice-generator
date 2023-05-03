@@ -6,5 +6,8 @@ const route = express.Router()
 route
     .route("/")
     .post(InvoiceController.createInvoice)
+    .get(InvoiceController.getAllInvoice)
+
+
 
 module.exports = route
