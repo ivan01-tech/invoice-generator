@@ -4,6 +4,7 @@ import SelcetUser from "../select/SelcetUser";
 import { useUsers } from "../../hooks/useUsers";
 import { useAsyncFn } from "../../hooks/useAsync";
 import { createInvoice } from "../../services/InvoiceCrud";
+import { useNavigate } from "react-router-dom";
 
 const ITEM_FIELDS = {
   item: "item",
@@ -17,6 +18,7 @@ const initialItemState = {
 };
 
 function GenerateInvoiceForm() {
+  const navigate = useNavigate();
   // state to manage posting of and invoice
   const {
     error: InvoiceError,
@@ -68,7 +70,14 @@ function GenerateInvoiceForm() {
     // hide the error message if exist first
     setError(false);
     setItems((prev) => {
-      const newObj = { ...prev[ind], [field]: e.target.value };
+      const value = e.target.value;
+      // to make sure that the value is greater than 0
+      console.log("ind : ", ind, value);
+      if (field !== ITEM_FIELDS.item && !(parseFloat(value) > 0)) {
+        return prev;
+      }
+
+      const newObj = { ...prev[ind], [field]: value };
       prev[ind] = newObj;
       return [...prev];
     });
@@ -94,13 +103,15 @@ function GenerateInvoiceForm() {
     executeFn({ userId: selectedUserId, items: Items })
       .then((res) => {
         // refrzsh the state or navigate to the route
-        console.log("err : ", res);
+        console.log("resCalled : ", res);
+        // we naviagte directly to the page were the invoice can be send
+        navigate(`/send_invoice/${res?._doc._id}`);
       })
       .catch((err) => {
-        console.log("err : ", err);
+        console.log("err111 : ", err);
       });
   };
-
+  console.log("value : ", value);
   return (
     <div className="genInvoiceWrap">
       <h3>Generate Invoice</h3>
@@ -133,7 +144,7 @@ function GenerateInvoiceForm() {
                 <div className="inputItem " key={ind}>
                   <input
                     min={0.5}
-                    step={0.1}
+                    step={0.5}
                     required
                     type="text"
                     name={`hours${ind}`}
@@ -145,7 +156,7 @@ function GenerateInvoiceForm() {
 
                   <input
                     min={0.5}
-                    step={0.1}
+                    step={0.5}
                     required
                     type="number"
                     name={`rate${ind}`}

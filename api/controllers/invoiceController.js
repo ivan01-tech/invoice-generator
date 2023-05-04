@@ -5,19 +5,22 @@ const userModels = require("../models/userModels")
 module.exports = class InvoiceController {
 	/**
 	 * get All invoice
-	 * @param {Request} req 
-	 * @param {Response} res 
+	 * @param {import("express").Request} req 
+	 * @param {import("express").Response} res 
 	 * @returns 
 	 */
 	static async getAllInvoice(req, res) {
 		const invoices = await invoiceModel.find()
+		if (!invoices || !Boolean(invoices.length)) {
+			return res.status(404).json({ status: "error", message: "invoice not found" })
+		}
 		return res.json(invoices)
 	}
 
 	/**
 	 * to add new invoice 
-	 * @param {Request} req 
-	 * @param {Response} res 
+	 * @param {import("express").Request} req 
+	 * @param {import("express").Response} res 
 	 * @access public
 	 * @route /invoices
 	 */
@@ -25,7 +28,6 @@ module.exports = class InvoiceController {
 		try {
 
 			const { userId, items } = req.body
-
 
 			if (!mongoose.Types.ObjectId.isValid(userId) || !Boolean(items?.length)) {
 				return res.status(403).json({ message: "wrong crudentials!", status: "error" })
@@ -48,6 +50,7 @@ module.exports = class InvoiceController {
 				userId: new mongoose.Types.ObjectId(userId),
 				items: parseItems
 			})
+			// TODO send the correct response
 			console.log("invoice : ", invoice)
 			return res.status(201).json({ ...invoice })
 
@@ -55,6 +58,51 @@ module.exports = class InvoiceController {
 			console.log("err : ", err)
 			return res.status(500).json({ message: "Something went wrong ", status: "error" })
 		}
+	}
+	/**
+	 * to get invoice by it's id
+	 * @param {import("express").Request} req 
+	 * @param {import("express").Response} res 
+	 * @access public
+	 * @route /invoices/:id
+	 */
+	static async sendInvoice(req, res) {
+		try {
 
+			const { id } = req.params
+			const { invoice_id } = req.body
+
+			if (id !== invoice_id || !mongoose.Types.ObjectId.isValid(invoice_id)) {
+				return res.status(404).json({ status: "error", message: "wrong crudentials !" })
+			}
+
+			const invoice = await invoiceModel
+				.findById(new mongoose.Types.ObjectId(invoice_id))
+				// .populate("User", { strictPopulate: false })
+				.lean()
+				.exec()
+			if (!invoice) {
+				return res.status(404).json({ status: "error", message: "invoice not found" })
+			}
+
+			const user = await userModels
+				.findById(new mongoose.Types.ObjectId(invoice?.userId))
+				.lean()
+				.exec()
+			console.log("invoice : ", invoice)
+			console.log("invoice : ", user)
+
+			if (!user) {
+				return res.status(404).json({ status: "error", message: "user not found" })
+			}
+
+			return res.json({ items: invoice?.items, user })
+
+		} catch (err) {
+
+			console.log("err : ", err)
+			return res.status(500).json({ message: "Something went wrong ", status: "error" })
+
+		}
 	}
 }

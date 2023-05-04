@@ -1,8 +1,51 @@
-import React from "react";
+import { renderToStream } from "@react-pdf/renderer";
+import React, { useEffect } from "react";
 import profile from "../../assets/profile.png";
 import "./SendInvoice.css";
+import { useParams } from "react-router-dom";
+import BasicDocument from "../reactPds";
+import axios from "axios";
+import { useAsync, useAsyncFn } from "../../hooks/useAsync";
+import { sendInvoiceId } from "../../services/InvoiceCrud";
 
 function SendInvoice() {
+  const { invoice_id } = useParams();
+  const { error, loading, value, executeFn } = useAsyncFn(sendInvoiceId);
+
+  const SendInvoiceHandler = async function (e) {
+    e.preventDefault();
+    // TODO hit the route to send the email on the server
+
+    executeFn({ invoice_id })
+      .then((res) => {
+        console.log("reeForm : ", res);
+      })
+      .catch((err) => {
+        console.log("errform : ", err);
+      });
+    // const document = await console.log("doc = ", document);
+  };
+
+  useEffect(
+    function () {
+      executeFn({ invoice_id })
+        .then((res) => {
+          console.log("reeForm : ", res);
+        })
+        .catch((err) => {
+          console.log("errform : ", err);
+        });
+    },
+    [invoice_id, executeFn]
+  );
+
+  if (loading) return <h3>loading...</h3>;
+
+  if (error) return <h3>{error}</h3>;
+  const totalSum = value?.items?.reduce(
+    (acc, item) => acc + item.hours * item.rate,
+    0
+  );
   return (
     <div className="sendWrap">
       <strong>Invoice</strong>
@@ -21,12 +64,12 @@ function SendInvoice() {
               src={profile}
               alt="profile"
             />
-            <p>Ivan Silatsa</p>
+            <p>{value?.user?.fullname}</p>
           </div>
         </div>
         <div>
-          <span>Email</span>
-          <span>ivansilatsa@gamil.com</span>
+          <span>{value?.user?.phone}</span>
+          <span>{value?.user?.email}</span>
         </div>
         <div>
           <span>Phone</span>
@@ -39,21 +82,18 @@ function SendInvoice() {
           <p>Rate</p>
           <p>Hours</p>
         </div>
-        <div>
-          <strong>Ivan Silatsa</strong>
-          <strong>$ 30.0</strong>
-          <strong>4</strong>
-        </div>
-        <div>
-          <strong>Ivan Silatsa</strong>
-          <strong>$ 30.0</strong>
-          <strong>4</strong>
-        </div>
+        {value?.items?.map((item) => (
+          <div>
+            <strong>{item.title}</strong>
+            <strong>{item.hours}</strong>
+            <strong>{item.rate}</strong>
+          </div>
+        ))}
       </div>
       <div className="totalPrice">
-        <h4>Total: US$ 60 </h4>
+        <h4>Total: US$ {totalSum}</h4>
       </div>
-      <button> Send</button>
+      <button onClick={SendInvoiceHandler}>Send</button>
     </div>
   );
 }

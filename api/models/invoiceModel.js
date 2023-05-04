@@ -1,7 +1,12 @@
 const { default: mongoose } = require("mongoose")
 
 const InvoiceSchema = mongoose.Schema({
-    userId: { type: mongoose.Types.ObjectId, require: true },
+    userId: {
+        type: mongoose.Types.ObjectId,
+        require: true,
+        ref: "User",
+    },
+
     items: Array({
         title: {
             type: String,

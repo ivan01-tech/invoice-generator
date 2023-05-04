@@ -19,7 +19,7 @@ export const useAsyncFn = function (func, dependencies = []) {
  * @param {Function} func 
  * @param {Array} dependencies 
  * @param {boolean} initial 
- * @returns 
+ * @returns An object that content error , loading , and the value of the resquesy
  */
 export function useAsyncInternal(func, dependencies = [], initial) {
 
@@ -35,15 +35,16 @@ export function useAsyncInternal(func, dependencies = [], initial) {
 		setLoading(true)
 		return func(...params)
 			.then(res => {
-
-				if(res?.status){
+				if (res?.status) {
 					setError(res?.message)
 					setValue(undefined)
+
 					return Promise.reject(res?.message)
 				}
 
 				setValue(res)
 				setError(undefined)
+
 				return res
 			})
 			.catch(err => {
@@ -54,7 +55,7 @@ export function useAsyncInternal(func, dependencies = [], initial) {
 			.finally(() => {
 				setLoading(false)
 			})
-	}, [...dependencies])
+	}, [func, ...dependencies])
 
 	return { error, loading, value, executeFn }
 

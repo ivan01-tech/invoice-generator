@@ -11,3 +11,10 @@ export const createInvoice = function (params) {
         data: JSON.stringify(params)
     })
 }
+
+export const sendInvoiceId = function ({ invoice_id }) {
+    return makeRequest(`/invoices/${invoice_id}`, {
+        method: "POST",
+        data: JSON.stringify({ invoice_id })
+    })
+}

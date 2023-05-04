@@ -7,7 +7,9 @@ route
     .route("/")
     .post(InvoiceController.createInvoice)
     .get(InvoiceController.getAllInvoice)
-
+route
+    .route("/:id")
+    .post(InvoiceController.sendInvoice)
 
 
 module.exports = route

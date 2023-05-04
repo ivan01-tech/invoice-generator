@@ -6,6 +6,7 @@ import NewClientForm from "./components/new/NewClientForm";
 import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
+import BasicDocument from "./components/reactPds";
 
 function App() {
   return (
@@ -15,7 +16,9 @@ function App() {
           <Route index element={<Home />} />
           <Route path="new_user" element={<NewClientForm />} />
           <Route path="generate_invoice" element={<GenerateInvoiceForm />} />
-          <Route path="send_invoice" element={<SendInvoice />} />
+          <Route path="send_invoice/:invoice_id" element={<SendInvoice />} />
+
+          <Route path="pdf" element={<BasicDocument />} />
 
           {/* not found pages */}
           <Route path="*" element={<NotFound />} />
