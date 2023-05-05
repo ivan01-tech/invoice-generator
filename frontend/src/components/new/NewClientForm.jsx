@@ -1,12 +1,19 @@
 import React, { useState } from "react";
 import "./newform.css";
+import {useNavigate} from "react-router-dom"
+import { createUser } from "../../services/UserCrud"
 import profile from "../../assets/profile.png";
 import { useRef } from "react";
-import { Axios } from "../../api/axios";
+import { useAsyncFn } from "../../hooks/useAsync";
+import { useUsers } from "../../hooks/useUsers";
 
-const PHONE_REGEX = "(+237|237)s(6|2)(2|3|[5-9])[0-9]{7}/g";
+// const PHONE_REGEX = "$(+237|237)s(6|2)(2|3|[5-9])[0-9]{7}/^";
 
 function NewClientForm() {
+  const navigate = useNavigate()
+  // state to manage posting of a user
+  const { executeFn, error, loading } = useAsyncFn(createUser)
+  const {updateUsersListLocal} = useUsers()
   // a ref to get all inputs value
   const inputRef = useRef([]);
 
@@ -36,32 +43,37 @@ function NewClientForm() {
     const fullname = inputRef.current[0].value;
     const phone = inputRef.current[2].value;
     const email = inputRef.current[1].value;
+    // check if the fullname have at least 2 word with more than three chars each one
+    const isfnCorrect = fullname.split(" ").every((part) => part.length >= 4);
 
-    const isfnCorrect = fullname.split(" ").every((part) => part.length > 4);
-
-    const isPhoneCorrect = phone.match(PHONE_REGEX);
+    // checking for the number as cameroon number's
+    // const isPhoneCorrect = phone.match(PHONE_REGEX);
 
     console.log(fullname, phone, email);
-    console.log(isfnCorrect, isPhoneCorrect);
+    // console.log(isfnCorrect, isPhoneCorrect);
 
     if (!isfnCorrect) return setisFnErr(true);
-    if (!isPhoneCorrect) return setisPhoneErr(true);
+    // if (!isPhoneCorrect) return setisPhoneErr(true);
 
-    try {
-      const res = await Axios.post("/users", { fullname, phone, email });
+    executeFn({ fullname, phone, email }).then(res => {
+      updateUsersListLocal(res)
+      // navigate to the home page
+      navigate("/")
+    }).catch(err=>{
+      console.log("ctach : ",err)
+    })
 
-      console.log(res);
-    } catch (err) {
-      console.log(err);
-    }
-
-    return;
   };
 
   return (
     <div className="newFormWrap">
       <h3>Client Informations</h3>
       <form onSubmit={submitFormHandler}>
+
+        {/* display error and loadind */}
+        {error && <div className="error">{error}</div>}
+        {loading && <div className="error">{loading}</div>}
+
         <div className="inputGrp">
           <label htmlFor="name">Full name </label>
           <input
