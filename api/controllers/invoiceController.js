@@ -66,7 +66,7 @@ module.exports = class InvoiceController {
 	 * @access public
 	 * @route /invoices/:id
 	 */
-	static async sendInvoice(req, res) {
+	static async getInvoiceById(req, res) {
 		try {
 
 			const { id } = req.params
@@ -105,4 +105,37 @@ module.exports = class InvoiceController {
 
 		}
 	}
+	/**
+		 * to send invoice via mail
+		 * @param {import("express").Request} req 
+		 * @param {import("express").Response} res 
+		 * @access public
+		 * @route /invoices/:id/send_email
+		 */
+	static async sendEmail(req, res) {
+		const { invoice_id } = req.params
+
+		// is the invoice id valid ?
+		if (!mongoose.Types.ObjectId.isValid(invoice_id)) {
+			return res.status(400).json({ status: "error", message: "the provided id is not valid" })
+		}
+
+		// fetch the data we want to use
+		const invoice = await invoiceModel
+			.findById(new mongoose.Types.ObjectId(invoice_id))
+			// .populate("User", { strictPopulate: false })
+			.lean()
+			.exec()
+		if (!invoice) {
+			return res.status(404).json({ status: "error", message: "invoice not found" })
+		}
+
+		const user = await userModels
+			.findById(new mongoose.Types.ObjectId(invoice?.userId))
+			.lean()
+			.exec()
+		console.log("invoice : ", invoice)
+		console.log("invoice : ", user)
+	}
+
 }

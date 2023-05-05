@@ -9,7 +9,10 @@ route
     .get(InvoiceController.getAllInvoice)
 route
     .route("/:id")
-    .post(InvoiceController.sendInvoice)
+    .post(InvoiceController.getInvoiceById)
+route
+    .route("/:invoice_id/sendmail")
+    .post(InvoiceController.sendEmail)
 
 
 module.exports = route

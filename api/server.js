@@ -12,6 +12,9 @@ const app = express()
 
 dbConnection()
 // middlewares
+// files to be save by the server
+app.use(express.static("public"))
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors(corsOptions))
