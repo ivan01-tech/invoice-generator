@@ -11,7 +11,7 @@ route
     .route("/:id")
     .post(InvoiceController.getInvoiceById)
 route
-    .route("/:invoice_id/sendmail")
+    .route("/:invoice_id/send_email")
     .post(InvoiceController.sendEmail)
 
 

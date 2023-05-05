@@ -1,4 +1,4 @@
-
+const path = require("node:path")
 require("dotenv").config()
 const nodemailer = require("nodemailer")
 //reference the plugin
@@ -19,7 +19,7 @@ module.exports = sendEmailConfig = function () {
   const handlebarOptions = {
     viewEngine: {
       partialsDir: path.resolve('../view/'),
-      defaultLayout: false,
+      defaultLayout: true,
     },
     viewPath: path.resolve('../views/'),
   };
@@ -33,7 +33,7 @@ module.exports = sendEmailConfig = function () {
       from: `Ivan01-tech <${process.env.EMAIL}>`,
       subject,
       // TODO specify it here : the pdf
-      attachments: [{ path: "/pdf/test.pdf" }],
+      // attachments: [{ path: path.resolve("../public/pdf/React-pdf.pdf") }],
       sender: process.env.EMAIL,
       // TODO modify it here : add the pdf file
       html: `<h2>You have receive a new message from Invoice Genarator App</h2>
