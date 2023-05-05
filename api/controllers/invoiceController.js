@@ -139,7 +139,6 @@ module.exports = class InvoiceController {
 				.lean()
 				.exec()
 
-
 			const { transporter, setEmailOptions } = sendEmailConfig()
 			const items = invoice.items
 			console.log("invoice : ", items)

@@ -14,16 +14,16 @@ module.exports = sendEmailConfig = function () {
       pass: process.env.PASSWORD
     },
   })
-
+  const pathDir = path.resolve('./views/').toString()
   // point to the template folder
   const handlebarOptions = {
     viewEngine: {
-      partialsDir: path.resolve('../view/'),
-      defaultLayout: true,
+      partialsDir: pathDir,
+      defaultLayout: false,
     },
-    viewPath: path.resolve('../views/'),
+    viewPath: pathDir,
   };
-
+  console.log("path : ", pathDir)
   // use a template file with nodemailer
   transporter.use('compile', hbs(handlebarOptions))
 
@@ -33,14 +33,21 @@ module.exports = sendEmailConfig = function () {
       from: `Ivan01-tech <${process.env.EMAIL}>`,
       subject,
       // TODO specify it here : the pdf
-      // attachments: [{ path: path.resolve("../public/pdf/React-pdf.pdf") }],
+      // attachments: [{ path: ""}],
       sender: process.env.EMAIL,
       // TODO modify it here : add the pdf file
-      html: `<h2>You have receive a new message from Invoice Genarator App</h2>
-    <p>${message}</p>`,
-      text: `You have receive a new message from Invoice Genarator App : ${message}`,
+      // html: `<h2>You have receive a new message from Invoice Genarator App</h2>
+      // <p>${message}</p>`,
+      // text: `You have receive a new message from Invoice Genarator App : ${message}`,
       template: "email",//the name of the file
-      context: { user, items }
+      context: {
+        user,
+        items,
+        totalSum: items.reduce(
+          (acc, item) => acc + item.hours * item.rate,
+          0
+        )
+      }
     }
   }
   return { transporter, setEmailOptions }
