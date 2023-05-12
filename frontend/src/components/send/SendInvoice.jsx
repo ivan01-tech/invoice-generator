@@ -1,11 +1,8 @@
-import { renderToStream } from "@react-pdf/renderer";
 import React, { useEffect } from "react";
 import profile from "../../assets/profile.png";
 import "./SendInvoice.css";
 import { useParams } from "react-router-dom";
-import BasicDocument from "../reactPds";
-import axios from "axios";
-import { useAsync, useAsyncFn } from "../../hooks/useAsync";
+import { useAsyncFn } from "../../hooks/useAsync";
 import { sendInvoiceId } from "../../services/InvoiceCrud";
 
 function SendInvoice() {
@@ -41,7 +38,7 @@ function SendInvoice() {
 
   if (loading) return <h3>loading...</h3>;
 
-  if (error) return <h3>{error}</h3>;
+  if (error) return <h3>{ error }</h3>;
   const totalSum = value?.items?.reduce(
     (acc, item) => acc + item.hours * item.rate,
     0
@@ -54,22 +51,22 @@ function SendInvoice() {
           <span>Client</span>
           <div className="clientName">
             <img
-              style={{
+              style={ {
                 cursor: "pointer",
                 borderRadius: "50%",
                 objectFit: "cover",
-              }}
-              width={"30px"}
-              height={30}
-              src={profile}
+              } }
+              width={ "30px" }
+              height={ 30 }
+              src={ profile }
               alt="profile"
             />
-            <p>{value?.user?.fullname}</p>
+            <p>{ value?.user?.fullname }</p>
           </div>
         </div>
         <div>
-          <span>{value?.user?.phone}</span>
-          <span>{value?.user?.email}</span>
+          <span>{ value?.user?.phone }</span>
+          <span>{ value?.user?.email }</span>
         </div>
         <div>
           <span>Phone</span>
@@ -82,18 +79,18 @@ function SendInvoice() {
           <p>Rate</p>
           <p>Hours</p>
         </div>
-        {value?.items?.map((item) => (
-          <div>
-            <strong>{item.title}</strong>
-            <strong>{item.hours}</strong>
-            <strong>{item.rate}</strong>
+        { value?.items?.map((item) => (
+          <div key={ item?._id }>
+            <strong>{ item.title }</strong>
+            <strong>{ item.hours }</strong>
+            <strong>{ item.rate }</strong>
           </div>
-        ))}
+        )) }
       </div>
       <div className="totalPrice">
-        <h4>Total: US$ {totalSum}</h4>
+        <h4>Total: US$ { totalSum }</h4>
       </div>
-      <button onClick={SendInvoiceHandler}>Send</button>
+      <button onClick={ SendInvoiceHandler }>Send</button>
     </div>
   );
 }
