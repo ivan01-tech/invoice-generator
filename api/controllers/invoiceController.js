@@ -2,6 +2,7 @@ const { default: mongoose } = require("mongoose");
 const invoiceModel = require("../models/invoiceModel");
 const userModels = require("../models/userModels");
 const sendEmailConfig = require("../config/sendEmailConfig");
+const generatePDF = require("../utils/generatePDF");
 
 module.exports = class InvoiceController {
   /**
@@ -133,7 +134,7 @@ module.exports = class InvoiceController {
           .status(400)
           .json({ status: "error", message: "the provided id is not valid" });
       }
-
+      /* 
       // fetch the data we want to use
       const invoice = await invoiceModel
         .findById(new mongoose.Types.ObjectId(invoice_id))
@@ -150,38 +151,36 @@ module.exports = class InvoiceController {
         .findById(new mongoose.Types.ObjectId(invoice?.userId))
         .lean()
         .exec();
+        */
 
+      // time to generate the pdf
+      await generatePDF(invoice_id);
+      console.log("passed 2");
+      // now we send it
       const { transporter, setEmailOptions } = sendEmailConfig();
-      const items = invoice.items;
-      console.log("invoice : ", items);
-      console.log("user : ", user);
 
       return transporter
         .sendMail(
           setEmailOptions({
             message: "Here is your invoice",
-            user,
-            items,
             subject: "Payment Invoice",
+            // TODO set it to the current user email
             receive: "ivansilatsa@gmail.com",
+            invoice_id,
           })
         )
         .then((r) => {
           console.log("res : ", r);
-          return res
-            .status(200)
-            .json({
-              message: "email send successfully !  : emailID " + r.messageId,
-            });
+          return res.status(200).json({
+            message: "email send successfully !  : emailID " + r.messageId,
+          });
         })
         .catch((err) => {
           console.log("err : ", err);
-          return res
-            .status(500)
-            .json({
-              status: "error",
-              message: "Can't send the email: server error !",
-            });
+          return res.status(500).json({
+            status: "error",
+            message: "Can't send the email: server error !",
+          });
         });
     } catch (err) {
       return res

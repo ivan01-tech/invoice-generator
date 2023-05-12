@@ -40,10 +40,10 @@ function SendInvoice() {
     function () {
       executeFn({ invoice_id })
         .then((res) => {
-          // console.log("reeForm : ", res);
+          console.log("reeForm : ", res);
         })
         .catch((err) => {
-          // console.log("errform : ", err);
+          console.log("errform : ", err);
         });
     },
     [invoice_id, executeFn]
