@@ -77,16 +77,15 @@ module.exports = class InvoiceController {
   static async getInvoiceById(req, res) {
     try {
       const { id } = req.params;
-      const { invoice_id } = req.body;
 
-      if (id !== invoice_id || !mongoose.Types.ObjectId.isValid(invoice_id)) {
+      if (!mongoose.Types.ObjectId.isValid(id)) {
         return res
           .status(404)
           .json({ status: "error", message: "wrong crudentials !" });
       }
 
       const invoice = await invoiceModel
-        .findById(new mongoose.Types.ObjectId(invoice_id))
+        .findById(new mongoose.Types.ObjectId(id))
         // .populate("User", { strictPopulate: false })
         .lean()
         .exec();
@@ -127,35 +126,45 @@ module.exports = class InvoiceController {
   static async sendEmail(req, res) {
     try {
       const { invoice_id } = req.params;
-
+      const { userId } = req.body;
+      console.log("userId : ", userId);
       // is the invoice id valid ?
-      if (!mongoose.Types.ObjectId.isValid(invoice_id)) {
+      if (
+        !mongoose.Types.ObjectId.isValid(invoice_id) ||
+        !mongoose.Types.ObjectId.isValid(userId)
+      ) {
         return res
           .status(400)
           .json({ status: "error", message: "the provided id is not valid" });
       }
-      /* 
-      // fetch the data we want to use
+
+      /* // fetch the data we want to use
       const invoice = await invoiceModel
         .findById(new mongoose.Types.ObjectId(invoice_id))
         // .populate("User", { strictPopulate: false })
         .lean()
         .exec();
+
       if (!invoice) {
         return res
           .status(404)
           .json({ status: "error", message: "invoice not found" });
       }
-
+ */
       const user = await userModels
-        .findById(new mongoose.Types.ObjectId(invoice?.userId))
+        .findById(new mongoose.Types.ObjectId(userId))
         .lean()
         .exec();
-        */
+
+      if (!user) {
+        return res
+          .status(404)
+          .json({ status: "error", message: "user not found" });
+      }
 
       // time to generate the pdf
       await generatePDF(invoice_id);
-      console.log("passed 2");
+      console.log("passed 2 : ", user);
       // now we send it
       const { transporter, setEmailOptions } = sendEmailConfig();
 
@@ -165,7 +174,7 @@ module.exports = class InvoiceController {
             message: "Here is your invoice",
             subject: "Payment Invoice",
             // TODO set it to the current user email
-            receive: "ivansilatsa@gmail.com",
+            receive: user.email,
             invoice_id,
           })
         )

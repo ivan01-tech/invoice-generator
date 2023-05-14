@@ -1,6 +1,7 @@
 module.exports = generatePDF = async (invoice_id) => {
-  require("dotenv").config();
+  require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` });
   const puppeteer = require("puppeteer");
+
   console.log("website_url : ");
 
   // Create a browser instance
@@ -11,7 +12,6 @@ module.exports = generatePDF = async (invoice_id) => {
 
   // Website URL to export as pdf
   const website_url = `${process.env.CLIENT_URI_DEV}/send_invoice/${invoice_id}`;
-  // "http://localhost:3000/send_invoice/6452abe085a9abf27d5fd499";
   // Open URL in current page
   console.log("website_url : ", website_url);
   await page.goto(website_url, { waitUntil: "networkidle0" });

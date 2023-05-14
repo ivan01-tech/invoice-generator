@@ -1,4 +1,7 @@
+import { Link } from "react-router-dom";
 import { useUsers } from "../hooks/useUsers";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faShuffle } from "@fortawesome/free-solid-svg-icons";
 
 function Home() {
   const { error, loading, Users } = useUsers()
@@ -13,6 +16,19 @@ function Home() {
     ) : ""
 
   return <>
+    <nav className="navbar">
+      <ul>
+        <li>
+          <FontAwesomeIcon icon={ faPlus } />
+          <Link to={ "/new_user" } >CreateUser</Link>
+        </li>
+        <li>
+          <FontAwesomeIcon icon={ faShuffle } />
+          <Link to={ "/generate_invoice" } >CreateInvoice</Link>
+        </li>
+      </ul>
+    </nav>
+    <h4 style={ { textAlign: "center", margin: ".5rem 0rem" } }>List Of Available Users</h4>
     <ul>{ content }</ul>;
   </>
 }

@@ -14,14 +14,13 @@ export const createInvoice = function (params) {
 
 export const getInvoiceByIdClient = function ({ invoice_id }) {
   return makeRequest(`/invoices/${invoice_id}`, {
-    method: "POST",
-    data: JSON.stringify({ invoice_id }),
+    method: "GET",
   });
 };
 
-export const sendInvoiceIdClient = function ({ invoice_id }) {
+export const sendInvoiceIdClient = function ({ invoice_id, userId }) {
   return makeRequest(`/invoices/${invoice_id}/send_email`, {
     method: "POST",
-    data: JSON.stringify({ invoice_id }),
+    data: JSON.stringify({ userId }),
   });
 };

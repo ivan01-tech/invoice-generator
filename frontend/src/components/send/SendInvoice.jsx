@@ -1,6 +1,6 @@
 import { ColorRing } from "react-loader-spinner"
 import "./SendInvoice.css";
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import profile from "../../assets/profile.png";
 import { Link, useParams } from "react-router-dom";
 import { useAsyncFn } from "../../hooks/useAsync";
@@ -15,20 +15,24 @@ function SendInvoice() {
   const { error, loading, value, executeFn } = useAsyncFn(getInvoiceByIdClient);
 
   // state to manage sending of an email
-  const { error: emailError, loading: emailLoad, value: emailVal, executeFn: onSendEmail } = useAsyncFn(sendInvoiceIdClient);
+  const {
+    error: emailError,
+    loading: emailLoad,
+    value: emailVal,
+    executeFn: onSendEmail
+  } = useAsyncFn(sendInvoiceIdClient);
 
   const SendInvoiceHandler = async function (e) {
     e.preventDefault();
     // TODO hit the route to send the email on the server
-
-    onSendEmail({ invoice_id })
+    console.log("value : ", value)
+    onSendEmail({ invoice_id, userId: value.user?._id })
       .then((res) => {
         console.log("Form : ", res);
       })
       .catch((err) => {
         console.log("errform : ", err);
       });
-    // const document = await console.log("doc = ", document);
   };
 
   // to request data when the page load
@@ -101,12 +105,12 @@ function SendInvoice() {
           </div>
         </div>
         <div>
+          <span>Phone</span>
           <span>{ value?.user?.phone }</span>
-          <span>{ value?.user?.email }</span>
         </div>
         <div>
-          <span>Phone</span>
-          <span>+237 696 054 619</span>
+          <span>Email</span>
+          <span>{ value?.user?.email }</span>
         </div>
       </div>
       <div className="InvoiceDetails">
@@ -129,6 +133,7 @@ function SendInvoice() {
       <div className="totalPrice">
         <h4>Total: US$ { totalSum }</h4>
       </div>
+
       <button onClick={ SendInvoiceHandler } disabled={ emailLoad }>
         { emailLoad ? <ColorRing
           visible={ true }
